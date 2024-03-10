@@ -12,21 +12,24 @@ class ExploratoryDataAnalysis:
 
   Métodos:
   - setDescription(self, description: str) -> None: Establece la descripción del conjunto de datos.
-  - getDescription(self) -> str: Devuelve la descripción del conjunto de datos.
-  - getShape(self) -> tuple: Devuelve la forma (número de filas y columnas) del conjunto de datos.
-  - getSize(self) -> int: Devuelve el tamaño total del conjunto de datos.
-  - getHead(self) -> pd.DataFrame: Devuelve las primeras filas del conjunto de datos.
-  - getColumns(self) -> list: Devuelve los nombres de las columnas del conjunto de datos.
-  - getTypes(self) -> pd.Series: Devuelve los tipos de datos de cada columna.
-  - getStatistics(self) -> pd.DataFrame: Devuelve estadísticas descriptivas del conjunto de datos.
-  - getNulls(self) -> pd.Series: Devuelve la cantidad de valores nulos por columna.
-  - getBoxplots(self) -> None: Genera boxplots para visualizar la distribución de las variables.
-  - getUniques(self) -> str: Devuelve la cantidad de valores únicos por columna.
-  - countUniques(self) -> str: Devuelve la cuenta de valores únicos para cada columna.
-  - getHistograms(self, nBins: int) -> None: Genera histogramas para visualizar la distribución de las variables.
-  - getCorrelationMatrix(self) -> None: Genera y muestra la matriz de correlación entre variables.
-  - getAutomaticStatisticalEDA(self) -> None: Realiza un análisis estadístico automático utilizando la biblioteca Sweetviz.
-  - getAutomaticGraphicalEDA(self) -> None: Realiza un análisis gráfico automático utilizando la biblioteca AutoViz.
+    - getDescription(self) -> str: Devuelve la descripción del conjunto de datos.
+    - getShape(self) -> tuple: Devuelve la forma (número de filas y columnas) del conjunto de datos.
+    - getSize(self) -> int: Devuelve el tamaño total del conjunto de datos.
+    - getHead(self) -> pd.DataFrame: Devuelve las primeras filas del conjunto de datos.
+    - getColumns(self) -> list: Devuelve los nombres de las columnas del conjunto de datos.
+    - getTypes(self) -> pd.Series: Devuelve los tipos de datos de cada columna.
+    - getStatistics(self) -> pd.DataFrame: Devuelve estadísticas descriptivas del conjunto de datos.
+    - getNulls(self) -> pd.Series: Devuelve la cantidad de valores nulos por columna.
+    - getBoxplots(self) -> None: Genera boxplots para visualizar la distribución de las variables.
+    - getUniques(self) -> pd.Series: Devuelve la cantidad de valores únicos por columna.
+    - countUniques(self) -> str: Devuelve la cuenta de valores únicos para cada columna.
+    - getHistograms(self, nBins: int) -> None: Genera histogramas para visualizar la distribución de las variables.
+    - getCorrelationMatrix(self) -> None: Genera y muestra la matriz de correlación entre variables.
+    - getAutomaticStatisticalEDA(self) -> None: Realiza un análisis estadístico automático utilizando la biblioteca Sweetviz.
+    - getAutomaticGraphicalEDA(self) -> None: Realiza un análisis gráfico automático utilizando la biblioteca AutoViz.
+    - get_numeric_columns(self) -> pd.Index: Devuelve las columnas numéricas del conjunto de datos.
+    - get_categorical_columns(self) -> pd.Index: Devuelve las columnas categóricas del conjunto de datos.
+    - plot_bar_charts_categorical_columns(self) -> None: Genera gráficos de barras para variables categóricas.
   """
 
   def __init__(self, dataset: pd.DataFrame) -> None:
@@ -82,6 +85,7 @@ class ExploratoryDataAnalysis:
     return (self.dataset.isnull().sum())
 
   def get_numeric_columns(self):
+    """Devuelve las columnas numéricas del conjunto de datos."""
     numeric_cols = self.dataset.select_dtypes(include=['float64', 'int64']).columns
     return numeric_cols
 
@@ -121,7 +125,7 @@ class ExploratoryDataAnalysis:
 
   def getHistograms(self, nBins: int = 10) -> None:
     """
-    Genera histogramas para visualizar la distribución de las variables.
+    Genera histogramas para visualizar la distribución de las variables numéricas.
     Parámetros:
     - nBins (int): Número de bins (contenedores) para el histograma. Por defecto, se establece en 10.
     """
@@ -143,10 +147,14 @@ class ExploratoryDataAnalysis:
     plt.show()
 
   def get_categorical_columns(self):
+    """Devuelve las columnas categóricas del conjunto de datos."""
     categorical_cols = self.dataset.select_dtypes(include=['object', 'category']).columns
     return categorical_cols
 
   def plot_bar_charts_categorical_columns(self):
+    """
+    Genera gráficos de barras para visualizar la distribución de las variables categóricas.
+    """
     num_cols = 3
     num_rows = math.ceil(len(self.get_categorical_columns()) / num_cols)
     fig, axs = plt.subplots(num_rows, num_cols, figsize=(12, 4 * num_rows))
